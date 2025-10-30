@@ -10,6 +10,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 find_package(fmt REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(glm REQUIRED)
 find_package(Vulkan REQUIRED)
 
 add_executable(learn_vulkan main.cpp)
@@ -17,5 +18,6 @@ add_executable(learn_vulkan main.cpp)
 target_link_libraries(learn_vulkan PRIVATE 
     fmt::fmt
     glfw
+    glm::glm
     Vulkan::Vulkan
 )
