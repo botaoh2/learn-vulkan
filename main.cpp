@@ -9,6 +9,7 @@
 #include <iostream>
 
 int main() {
+
     glm::vec3 v{1, 2, 3};
     fmt::println("v = {} {} {}", v.x, v.y, v.z);
 
@@ -22,7 +23,7 @@ int main() {
 
     std::cout << extensionCount << " extensions supported\n";
 
-    while(!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
     }
 
