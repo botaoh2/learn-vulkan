@@ -6,25 +6,50 @@
 
 #include <glm/glm.hpp>
 
+#include <cstdint>
 #include <iostream>
 
-int main() {
-
-    glfwInit();
-
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan window", nullptr, nullptr);
-
-    uint32_t extensionCount = 0;
-    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-
-    std::cout << extensionCount << " extensions supported\n";
-
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+class HelloTriangleApp {
+  public:
+    HelloTriangleApp() {
+        initWindow();
+        initVulkan();
     }
 
-    glfwDestroyWindow(window);
+    ~HelloTriangleApp() { cleanup(); }
 
-    glfwTerminate();
+    void run() { mainLoop(); }
+
+  private:
+    void initWindow() {
+        glfwInit();
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+        m_window = glfwCreateWindow(m_width, m_height, "Vulkan", nullptr, nullptr);
+    }
+
+    void initVulkan() {}
+
+    void mainLoop() {
+        while (!glfwWindowShouldClose(m_window)) {
+            glfwPollEvents();
+        }
+    }
+
+    void cleanup() {
+        glfwDestroyWindow(m_window);
+
+        glfwTerminate();
+    }
+
+    uint32_t m_width = 800;
+    uint32_t m_height = 600;
+    GLFWwindow* m_window = nullptr;
+};
+
+int main() {
+    HelloTriangleApp app;
+    app.run();
 }
