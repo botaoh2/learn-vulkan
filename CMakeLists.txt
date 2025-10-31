@@ -15,6 +15,8 @@ find_package(Vulkan REQUIRED)
 
 add_executable(learn_vulkan main.cpp)
 
+target_compile_definitions(learn_vulkan PRIVATE GLM_FORCE_DEPTH_ZERO_TO_ONE)
+
 target_link_libraries(learn_vulkan PRIVATE 
     fmt::fmt
     glfw

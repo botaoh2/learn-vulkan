@@ -10,9 +10,6 @@
 
 int main() {
 
-    glm::vec3 v{1, 2, 3};
-    fmt::println("v = {} {} {}", v.x, v.y, v.z);
-
     glfwInit();
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
