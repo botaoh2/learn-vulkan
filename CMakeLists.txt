@@ -13,7 +13,9 @@ find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
 find_package(Vulkan REQUIRED)
 
-add_executable(learn_vulkan main.cpp)
+add_executable(learn_vulkan 
+    src/main.cpp
+)
 
 target_compile_definitions(learn_vulkan PRIVATE GLM_FORCE_DEPTH_ZERO_TO_ONE)
 
