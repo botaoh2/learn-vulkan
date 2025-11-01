@@ -1,35 +1,20 @@
+#include "test_base.h"
 
-#include <fmt/format.h>
-
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
-#include <glm/glm.hpp>
-
-#include <cstdint>
-#include <iostream>
-
-#define VK_CHECK(x)                                                                                                    \
-    do {                                                                                                               \
-        VkResult err = x;                                                                                              \
-        if (err != VK_SUCCESS) {                                                                                       \
-            std::cerr << "Detected Vulkan error: " << err << " at " << __FILE__ << ":" << __LINE__ << "\n";            \
-            std::abort();                                                                                              \
-        }                                                                                                              \
-    } while (0)
-
-class HelloTriangleApp {
-  public:
-    HelloTriangleApp() {
+class HelloTriangleApp : public TestBase<HelloTriangleApp> {
+public:
+    void prerun() {
         initWindow();
         initVulkan();
     }
 
-    ~HelloTriangleApp() { cleanup(); }
+    int run() {
+        mainLoop();
+        return 0;
+    }
 
-    void run() { mainLoop(); }
+    void postrun() { cleanup(); }
 
-  private:
+private:
     void initWindow() {
         glfwInit();
 
@@ -88,5 +73,5 @@ class HelloTriangleApp {
 
 int main() {
     HelloTriangleApp app;
-    app.run();
+    return app.execute();
 }

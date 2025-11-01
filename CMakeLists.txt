@@ -15,9 +15,13 @@ find_package(Vulkan REQUIRED)
 
 add_executable(learn_vulkan 
     src/main.cpp
+    src/test_base.h
 )
 
-target_compile_definitions(learn_vulkan PRIVATE GLM_FORCE_DEPTH_ZERO_TO_ONE)
+target_compile_definitions(learn_vulkan PRIVATE 
+    GLM_FORCE_DEPTH_ZERO_TO_ONE
+    GLFW_INCLUDE_VULKAN
+)
 
 target_link_libraries(learn_vulkan PRIVATE 
     fmt::fmt
