@@ -8,11 +8,13 @@
 
 #include <cstdint>
 
+#define LOG(...) fmt::print(__VA_ARGS__)
+
 #define VK_CHECK(x)                                                                                                    \
     do {                                                                                                               \
         VkResult err = x;                                                                                              \
         if (err != VK_SUCCESS) {                                                                                       \
-            fmt::print("Detected Vulkan error: {} at {}:{}\n", static_cast<int>(err), __FILE__, __LINE__);             \
+            LOG("Detected Vulkan error: {} at {}:{}\n", static_cast<int>(err), __FILE__, __LINE__);                    \
             std::abort();                                                                                              \
         }                                                                                                              \
     } while (0)
