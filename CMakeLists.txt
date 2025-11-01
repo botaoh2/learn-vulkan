@@ -15,6 +15,7 @@ find_package(Vulkan REQUIRED)
 
 add_executable(learn_vulkan 
     src/main.cpp
+    src/test_base.cpp
     src/test_base.h
 )
 
