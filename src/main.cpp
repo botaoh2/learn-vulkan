@@ -14,6 +14,7 @@ void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& create
 class HelloTriangleApp : public TestBase<HelloTriangleApp> {
 public:
     void prerun() {
+        VK_CHECK(volkInitialize());
         initWindow();
         initVulkan();
     }
@@ -48,7 +49,7 @@ private:
 
     void cleanup() {
         if constexpr (k_enableValidationLayers) {
-            DestroyDebugUtilsMessengerEXT(m_instance, m_debugMessenger, nullptr);
+            vkDestroyDebugUtilsMessengerEXT(m_instance, m_debugMessenger, nullptr);
         }
 
         vkDestroyInstance(m_instance, nullptr);
@@ -96,6 +97,7 @@ private:
         createInfo.ppEnabledExtensionNames = extensions.data();
 
         VK_CHECK(vkCreateInstance(&createInfo, nullptr, &m_instance));
+        volkLoadInstance(m_instance);
     }
 
     void setupDebugMessenger() {
@@ -106,7 +108,7 @@ private:
         VkDebugUtilsMessengerCreateInfoEXT createInfo{};
         populateDebugMessengerCreateInfo(createInfo);
 
-        VK_CHECK(CreateDebugUtilsMessengerEXT(m_instance, &createInfo, nullptr, &m_debugMessenger));
+        VK_CHECK(vkCreateDebugUtilsMessengerEXT(m_instance, &createInfo, nullptr, &m_debugMessenger));
     }
 
     uint32_t m_width = 800;
