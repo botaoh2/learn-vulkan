@@ -35,11 +35,6 @@ constexpr bool k_enableValidationLayers = false;
 constexpr bool k_enableValidationLayers = true;
 #endif
 
-const std::vector<const char*> g_validationLayers = {"VK_LAYER_KHRONOS_validation"};
-
-bool checkValidationLayerSupport();
-std::vector<const char*> getRequiredExtensions();
-
 static inline VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                                                            VkDebugUtilsMessageTypeFlagsEXT messageType,
                                                            const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
@@ -50,16 +45,37 @@ static inline VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSe
     return VK_FALSE;
 }
 
-template <typename Derived>
+constexpr uint32_t width = 800;
+constexpr uint32_t height = 600;
+
 class TestBase {
 public:
+    TestBase();
+    virtual ~TestBase();
+
+    virtual void prerun() {}
+    virtual int run() = 0;
+    virtual void postrun() {}
+
     int execute() {
         int result = 0;
 
-        static_cast<Derived*>(this)->prerun();
-        result += static_cast<Derived*>(this)->run();
-        static_cast<Derived*>(this)->postrun();
+        prerun();
+        result += run();
+        postrun();
 
         return result;
     }
+
+protected:
+    GLFWwindow* m_window = nullptr;
+
+    VkInstance m_instance = VK_NULL_HANDLE;
+
+    VkDebugUtilsMessengerEXT m_debugMessenger = VK_NULL_HANDLE;
+
+private:
+    void initWindow();
+    void initVulkanInstance();
+    void initDebugMessenger();
 };
