@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <cstdlib>
+#include <optional>
 #include <source_location>
 #include <vector>
 
@@ -21,9 +22,9 @@ inline void CHECK(bool condition, const std::source_location location = std::sou
     }
 }
 
-inline void VK_CHECK(VkResult r, const std::source_location location = std::source_location::current()) {
-    if (r != VK_SUCCESS) {
-        LOG("VK_CHECK failed: {} at {}:{}", static_cast<int>(r), location.file_name(), location.line());
+inline void VK_CHECK(VkResult vkResult, const std::source_location location = std::source_location::current()) {
+    if (vkResult != VK_SUCCESS) {
+        LOG("VK_CHECK failed: {} at {}:{}", static_cast<int>(vkResult), location.file_name(), location.line());
         __debugbreak();
         std::abort();
     }
@@ -47,6 +48,14 @@ static inline VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSe
 
 constexpr uint32_t width = 800;
 constexpr uint32_t height = 600;
+
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphicsFamily;
+
+    bool isComplete() { return graphicsFamily.has_value(); }
+};
+
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
 class TestBase {
 public:
@@ -74,8 +83,11 @@ protected:
 
     VkDebugUtilsMessengerEXT m_debugMessenger = VK_NULL_HANDLE;
 
+    VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
+
 private:
     void initWindow();
     void initVulkanInstance();
     void initDebugMessenger();
+    void initPhysicalDevice();
 };
