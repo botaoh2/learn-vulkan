@@ -1,7 +1,7 @@
 #include "test_base.h"
 
 class HelloTriangleApp : public TestBase {
-public:
+protected:
     void prerun() override { initVulkan(); }
 
     int run() override {
@@ -23,7 +23,7 @@ private:
     void cleanup() {}
 };
 
-int main() {
+int main(int argc, char** argv) {
     HelloTriangleApp app;
-    return app.execute();
+    return app.runTest(argc, argv);
 }

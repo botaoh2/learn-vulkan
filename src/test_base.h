@@ -10,6 +10,8 @@
 #include <cstdlib>
 #include <optional>
 #include <source_location>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 #define LOG(...) fmt::println(__VA_ARGS__)
@@ -59,24 +61,19 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
 class TestBase {
 public:
-    TestBase();
-    virtual ~TestBase();
+    virtual ~TestBase() = default;
 
+    int runTest(std::unordered_map<std::string, std::string> parameters);
+    int runTest(int argc, char** argv);
+    int runTest();
+
+protected:
     virtual void prerun() {}
     virtual int run() = 0;
     virtual void postrun() {}
 
-    int execute() {
-        int result = 0;
+    std::unordered_map<std::string, std::string> m_parameters;
 
-        prerun();
-        result += run();
-        postrun();
-
-        return result;
-    }
-
-protected:
     GLFWwindow* m_window = nullptr;
 
     VkInstance m_instance = VK_NULL_HANDLE;
@@ -89,6 +86,11 @@ protected:
     VkQueue m_queue = VK_NULL_HANDLE;
 
 private:
+    void parseArgs(int argc, char** argv);
+
+    void init();
+    void cleanup();
+
     void initWindow();
     void initVulkanInstance();
     void initDebugMessenger();

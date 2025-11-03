@@ -79,7 +79,46 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
     return indices;
 }
 
-TestBase::TestBase() {
+int TestBase::runTest(std::unordered_map<std::string, std::string> parameters) {
+    m_parameters = std::move(parameters);
+    return runTest();
+}
+
+int TestBase::runTest(int argc, char** argv) {
+    parseArgs(argc, argv);
+    return runTest();
+}
+
+int TestBase::runTest() {
+    init();
+
+    prerun();
+    int result = run();
+    postrun();
+
+    cleanup();
+
+    return result;
+}
+
+void TestBase::parseArgs(int argc, char** argv) {
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg.rfind("--", 0) == 0) {
+            auto eq = arg.find('=');
+            if (eq != std::string::npos) {
+                std::string key = arg.substr(2, eq - 2);
+                std::string value = arg.substr(eq + 1);
+                m_parameters[key] = value;
+            } else {
+                std::string key = arg.substr(2);
+                m_parameters[key] = "";
+            }
+        }
+    }
+}
+
+void TestBase::init() {
     VK_CHECK(volkInitialize());
     initWindow();
     initVulkanInstance();
@@ -88,7 +127,7 @@ TestBase::TestBase() {
     initLogicalDevice();
 }
 
-TestBase::~TestBase() {
+void TestBase::cleanup() {
 
     vkDestroyDevice(m_device, nullptr);
 
