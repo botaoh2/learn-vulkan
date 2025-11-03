@@ -85,9 +85,13 @@ protected:
 
     VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
 
+    VkDevice m_device = VK_NULL_HANDLE;
+    VkQueue m_queue = VK_NULL_HANDLE;
+
 private:
     void initWindow();
     void initVulkanInstance();
     void initDebugMessenger();
     void initPhysicalDevice();
+    void initLogicalDevice();
 };
