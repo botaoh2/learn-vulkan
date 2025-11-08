@@ -9,28 +9,30 @@
 #include <cstdint>
 #include <cstdlib>
 #include <optional>
-#include <source_location>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #define LOG(...) fmt::println(__VA_ARGS__)
 
-inline void CHECK(bool condition, const std::source_location location = std::source_location::current()) {
-    if (!condition) {
-        LOG("CHECK failed at {}:{}", location.file_name(), location.line());
-        __debugbreak();
-        std::abort();
-    }
-}
+#define CHECK(expr)                                                                                                    \
+    do {                                                                                                               \
+        if (!(expr)) {                                                                                                 \
+            LOG("CHECK failed at {}:{}", __FILE__, __LINE__);                                                          \
+            __debugbreak();                                                                                            \
+            std::abort();                                                                                              \
+        }                                                                                                              \
+    } while (0)
 
-inline void VK_CHECK(VkResult vkResult, const std::source_location location = std::source_location::current()) {
-    if (vkResult != VK_SUCCESS) {
-        LOG("VK_CHECK failed: {} at {}:{}", static_cast<int>(vkResult), location.file_name(), location.line());
-        __debugbreak();
-        std::abort();
-    }
-}
+#define VK_CHECK(expr)                                                                                                 \
+    do {                                                                                                               \
+        VkResult vkResult = (expr);                                                                                    \
+        if (vkResult != VK_SUCCESS) {                                                                                  \
+            LOG("VK_CHECK failed: {} at {}:{}", static_cast<int>(vkResult), __FILE__, __LINE__);                       \
+            __debugbreak();                                                                                            \
+            std::abort();                                                                                              \
+        }                                                                                                              \
+    } while (0)
 
 #ifdef NDEBUG
 constexpr bool k_enableValidationLayers = false;
