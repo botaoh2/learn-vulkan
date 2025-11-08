@@ -127,6 +127,7 @@ void TestBase::init() {
     VK_CHECK(volkInitialize());
     initWindow();
     initVulkanInstance();
+    initSurface();
     initDebugMessenger();
     initPhysicalDevice();
     initLogicalDevice();
@@ -140,6 +141,7 @@ void TestBase::cleanup() {
         vkDestroyDebugUtilsMessengerEXT(m_instance, m_debugMessenger, nullptr);
     }
 
+    vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
     vkDestroyInstance(m_instance, nullptr);
 
     glfwDestroyWindow(m_window);
@@ -197,6 +199,8 @@ void TestBase::initVulkanInstance() {
     VK_CHECK(vkCreateInstance(&createInfo, nullptr, &m_instance));
     volkLoadInstance(m_instance);
 }
+
+void TestBase::initSurface() { VK_CHECK(glfwCreateWindowSurface(m_instance, m_window, nullptr, &m_surface)); }
 
 void TestBase::initDebugMessenger() {
     if constexpr (!k_enableValidationLayers) {

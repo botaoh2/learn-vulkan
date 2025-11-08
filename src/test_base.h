@@ -83,6 +83,8 @@ protected:
 
     VkDebugUtilsMessengerEXT m_debugMessenger = VK_NULL_HANDLE;
 
+    VkSurfaceKHR m_surface = VK_NULL_HANDLE;
+
     VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
 
     VkDevice m_device = VK_NULL_HANDLE;
@@ -97,6 +99,7 @@ private:
     void initWindow();
     void initVulkanInstance();
     void initDebugMessenger();
+    void initSurface();
     void initPhysicalDevice();
     void initLogicalDevice();
 };
