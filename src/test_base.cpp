@@ -1,5 +1,7 @@
 #include "test_base.h"
 
+#include <fmt/ranges.h>
+
 #include <algorithm>
 
 namespace {
@@ -90,6 +92,9 @@ int TestBase::runTest(int argc, char** argv) {
 }
 
 int TestBase::runTest() {
+
+    LOG("Running {} with parameters: {}", testName(), fmt::join(m_parameters, " "));
+
     init();
 
     prerun();

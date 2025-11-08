@@ -70,6 +70,7 @@ public:
     int runTest();
 
 protected:
+    virtual std::string testName() { return "TestName"; }
     virtual void prerun() {}
     virtual int run() = 0;
     virtual void postrun() {}

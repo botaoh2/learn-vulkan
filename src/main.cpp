@@ -2,6 +2,8 @@
 
 class HelloTriangleApp : public TestBase {
 protected:
+    std::string testName() override { return "HelloTriangleApp"; }
+
     void prerun() override { initVulkan(); }
 
     int run() override {
