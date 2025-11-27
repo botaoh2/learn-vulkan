@@ -3,10 +3,11 @@
 #include <fmt/ranges.h>
 
 #include <algorithm>
+#include <array>
 
 namespace {
 
-const std::vector<const char*> g_validationLayers = {"VK_LAYER_KHRONOS_validation"};
+const auto g_validationLayers = std::to_array({"VK_LAYER_KHRONOS_validation"});
 
 bool checkValidationLayerSupport() {
     uint32_t layerCount;
