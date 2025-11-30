@@ -59,6 +59,12 @@ struct QueueFamilyIndices {
     bool isComplete() { return graphicsFamily.has_value(); }
 };
 
+struct SwapChainSupportDetails {
+    VkSurfaceCapabilitiesKHR capabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR> presentModes;
+};
+
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
 class TestBase {
@@ -90,6 +96,11 @@ protected:
     VkDevice m_device = VK_NULL_HANDLE;
     VkQueue m_queue = VK_NULL_HANDLE;
 
+    VkSwapchainKHR m_swapChain = VK_NULL_HANDLE;
+    std::vector<VkImage> m_swapChainImages;
+    VkFormat m_swapChainImageFormat{};
+    VkExtent2D m_swapChainExtent{};
+
 private:
     void parseArgs(int argc, char** argv);
 
@@ -102,4 +113,11 @@ private:
     void initSurface();
     void initPhysicalDevice();
     void initLogicalDevice();
+    void createSwapChain();
+
+    bool isDeviceSuitable(VkPhysicalDevice device);
+    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+    VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+    VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+    VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 };
