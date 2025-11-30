@@ -1,0 +1,15 @@
+{
+    "task.autoDetect": "off",
+    "files.associations": {
+        "conanfile.txt": "toml",
+    },
+
+    "[cpp]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.inlayHints.enabled": "offUnlessPressed"
+    },
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.inlayHints.parameterNames.enabled": true,
+    "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+}
