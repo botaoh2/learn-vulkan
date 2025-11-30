@@ -94,7 +94,11 @@ int TestBase::runTest(int argc, char** argv) {
 
 int TestBase::runTest() {
 
-    LOG("Running {} with parameters: {}", testName(), fmt::join(m_parameters, " "));
+    if (m_parameters.size() == 0) {
+        LOG("Running {}", testName());
+    } else {
+        LOG("Running {} with parameters: {}", testName(), fmt::join(m_parameters, " "));
+    }
 
     init();
 
