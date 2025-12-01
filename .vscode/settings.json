@@ -1,5 +1,6 @@
 {
     "task.autoDetect": "off",
+    "files.insertFinalNewline": true,
     "files.associations": {
         "conanfile.txt": "toml",
     },
