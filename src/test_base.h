@@ -101,6 +101,8 @@ protected:
     VkFormat m_swapChainImageFormat{};
     VkExtent2D m_swapChainExtent{};
 
+    std::vector<VkImageView> m_swapChainImageViews;
+
 private:
     void parseArgs(int argc, char** argv);
 
@@ -114,6 +116,7 @@ private:
     void initPhysicalDevice();
     void initLogicalDevice();
     void createSwapChain();
+    void createImageViews();
 
     bool isDeviceSuitable(VkPhysicalDevice device);
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
