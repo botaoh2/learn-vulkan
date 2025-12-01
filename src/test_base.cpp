@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include <cstring>
+#include <fstream>
 #include <limits>
 #include <ranges>
 
@@ -65,6 +66,22 @@ bool checkDeviceExtensionSupport(VkPhysicalDevice device) {
             return std::strcmp(extProps.extensionName, extName) == 0;
         });
     });
+}
+
+std::vector<uint32_t> readShaderFile(const std::string& filename) {
+    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+    CHECK(file.is_open());
+
+    size_t fileSize = static_cast<size_t>(file.tellg());
+    std::vector<char> buffer(fileSize);
+
+    file.seekg(0);
+    file.read(buffer.data(), fileSize);
+    file.close();
+
+    std::vector<uint32_t> result((buffer.size() + 3) / sizeof(uint32_t), 0);
+    std::memcpy(result.data(), buffer.data(), buffer.size());
+    return result;
 }
 
 } // namespace
@@ -149,6 +166,7 @@ void TestBase::init() {
     initPhysicalDevice();
     initLogicalDevice();
     createSwapChain();
+    createGraphicsPipeline();
 }
 
 void TestBase::cleanup() {
@@ -420,4 +438,41 @@ void TestBase::createImageViews() {
 
         VK_CHECK(vkCreateImageView(m_device, &createInfo, nullptr, &m_swapChainImageViews[i]));
     }
+}
+
+void TestBase::createGraphicsPipeline() {
+    auto vertShaderCode = readShaderFile("shader.vert.spv");
+    auto fragShaderCode = readShaderFile("shader.frag.spv");
+
+    VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
+    VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
+
+    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+    vertShaderStageInfo.module = vertShaderModule;
+    vertShaderStageInfo.pName = "main";
+
+    VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
+    fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    fragShaderStageInfo.module = fragShaderModule;
+    fragShaderStageInfo.pName = "main";
+
+    auto shaderStages = std::to_array({vertShaderStageInfo, fragShaderStageInfo});
+
+    vkDestroyShaderModule(m_device, fragShaderModule, nullptr);
+    vkDestroyShaderModule(m_device, vertShaderModule, nullptr);
+}
+
+VkShaderModule TestBase::createShaderModule(const std::vector<uint32_t>& code) {
+    VkShaderModuleCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    createInfo.codeSize = code.size() * sizeof(uint32_t);
+    createInfo.pCode = code.data();
+
+    VkShaderModule shaderModule;
+    VK_CHECK(vkCreateShaderModule(m_device, &createInfo, nullptr, &shaderModule));
+
+    return shaderModule;
 }
