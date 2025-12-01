@@ -31,3 +31,29 @@ target_link_libraries(learn_vulkan PRIVATE
     glm::glm
     volk::volk
 )
+
+find_program(GLSLC_EXECUTABLE glslc REQUIRED)
+
+function(compile_shader SHADER_SRC SHADER_SPV)
+    add_custom_command(
+        OUTPUT ${SHADER_SPV}
+        COMMAND ${GLSLC_EXECUTABLE} ${SHADER_SRC} -o ${SHADER_SPV}
+        DEPENDS ${SHADER_SRC}
+        COMMENT "Compiling ${SHADER_SRC} to SPIR-V"
+    )
+endfunction()
+
+set(SHADERS
+    shader.vert
+    shader.frag
+)
+
+set(SPIRV_FILES "")
+foreach(SHADER ${SHADERS})
+    set(SRC ${CMAKE_SOURCE_DIR}/shaders/${SHADER})
+    set(SPV ${CMAKE_BINARY_DIR}/bin/${SHADER}.spv)
+    compile_shader(${SRC} ${SPV})
+    list(APPEND SPIRV_FILES ${SPV})
+endforeach()
+
+add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_FILES})
