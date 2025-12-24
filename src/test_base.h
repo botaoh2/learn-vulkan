@@ -103,6 +103,8 @@ protected:
 
     std::vector<VkImageView> m_swapChainImageViews;
 
+    VkPipelineLayout m_pipelineLayout;
+
 private:
     void parseArgs(int argc, char** argv);
 
