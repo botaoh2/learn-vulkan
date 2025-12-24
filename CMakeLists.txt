@@ -51,7 +51,7 @@ set(SHADERS
 set(SPIRV_FILES "")
 foreach(SHADER ${SHADERS})
     set(SRC ${CMAKE_SOURCE_DIR}/shaders/${SHADER})
-    set(SPV ${CMAKE_BINARY_DIR}/bin/${SHADER}.spv)
+    set(SPV ${CMAKE_BINARY_DIR}/bin/shaders/${SHADER}.spv)
     compile_shader(${SRC} ${SPV})
     list(APPEND SPIRV_FILES ${SPV})
 endforeach()

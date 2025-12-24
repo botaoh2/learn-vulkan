@@ -441,8 +441,8 @@ void TestBase::createImageViews() {
 }
 
 void TestBase::createGraphicsPipeline() {
-    auto vertShaderCode = readShaderFile("shader.vert.spv");
-    auto fragShaderCode = readShaderFile("shader.frag.spv");
+    auto vertShaderCode = readShaderFile("shaders/shader.vert.spv");
+    auto fragShaderCode = readShaderFile("shaders/shader.frag.spv");
 
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);

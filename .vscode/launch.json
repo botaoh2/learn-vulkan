@@ -3,8 +3,8 @@
         {
             "name": "learn_vulkan",
             "type": "cppvsdbg",
-            "cwd": "${workspaceRoot}/build/bin/Debug",
-            "program": "learn_vulkan.exe",
+            "cwd": "${workspaceRoot}/build/bin",
+            "program": "Debug/learn_vulkan.exe",
             "request": "launch",
             "console": "integratedTerminal",
         }
