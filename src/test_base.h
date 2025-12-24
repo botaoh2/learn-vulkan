@@ -105,6 +105,7 @@ protected:
 
     VkRenderPass m_renderPass = VK_NULL_HANDLE;
     VkPipelineLayout m_pipelineLayout = VK_NULL_HANDLE;
+    VkPipeline m_graphicsPipeline = VK_NULL_HANDLE;
 
 private:
     void parseArgs(int argc, char** argv);

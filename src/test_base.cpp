@@ -172,6 +172,7 @@ void TestBase::init() {
 
 void TestBase::cleanup() {
 
+    vkDestroyPipeline(m_device, m_graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(m_device, m_pipelineLayout, nullptr);
     vkDestroyRenderPass(m_device, m_renderPass, nullptr);
 
@@ -495,9 +496,6 @@ void TestBase::createGraphicsPipeline() {
 
     auto shaderStages = std::to_array({vertShaderStageInfo, fragShaderStageInfo});
 
-    vkDestroyShaderModule(m_device, fragShaderModule, nullptr);
-    vkDestroyShaderModule(m_device, vertShaderModule, nullptr);
-
     constexpr auto dynamicStates = std::to_array<VkDynamicState>({
         VK_DYNAMIC_STATE_VIEWPORT,
         VK_DYNAMIC_STATE_SCISSOR,
@@ -579,6 +577,29 @@ void TestBase::createGraphicsPipeline() {
     pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
     VK_CHECK(vkCreatePipelineLayout(m_device, &pipelineLayoutInfo, nullptr, &m_pipelineLayout));
+
+    VkGraphicsPipelineCreateInfo pipelineInfo{};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.stageCount = static_cast<uint32_t>(shaderStages.size());
+    pipelineInfo.pStages = shaderStages.data();
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &inputAssembly;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizer;
+    pipelineInfo.pMultisampleState = &multisampling;
+    pipelineInfo.pDepthStencilState = nullptr; // Optional
+    pipelineInfo.pColorBlendState = &colorBlending;
+    pipelineInfo.pDynamicState = &dynamicState;
+    pipelineInfo.layout = m_pipelineLayout;
+    pipelineInfo.renderPass = m_renderPass;
+    pipelineInfo.subpass = 0;
+    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
+    pipelineInfo.basePipelineIndex = -1;              // Optional
+
+    VK_CHECK(vkCreateGraphicsPipelines(m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_graphicsPipeline));
+
+    vkDestroyShaderModule(m_device, fragShaderModule, nullptr);
+    vkDestroyShaderModule(m_device, vertShaderModule, nullptr);
 }
 
 VkShaderModule TestBase::createShaderModule(const std::vector<uint32_t>& code) {
