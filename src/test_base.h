@@ -103,7 +103,8 @@ protected:
 
     std::vector<VkImageView> m_swapChainImageViews;
 
-    VkPipelineLayout m_pipelineLayout;
+    VkRenderPass m_renderPass = VK_NULL_HANDLE;
+    VkPipelineLayout m_pipelineLayout = VK_NULL_HANDLE;
 
 private:
     void parseArgs(int argc, char** argv);
@@ -119,6 +120,7 @@ private:
     void initLogicalDevice();
     void createSwapChain();
     void createImageViews();
+    void createRenderPass();
     void createGraphicsPipeline();
 
     bool isDeviceSuitable(VkPhysicalDevice device);
