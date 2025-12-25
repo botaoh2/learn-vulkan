@@ -166,6 +166,7 @@ void TestBase::init() {
     initPhysicalDevice();
     initLogicalDevice();
     createSwapChain();
+    createImageViews();
     createRenderPass();
     createGraphicsPipeline();
 }
@@ -428,6 +429,7 @@ void TestBase::createImageViews() {
         VkImageViewCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         createInfo.image = m_swapChainImages[i];
+        createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
         createInfo.format = m_swapChainImageFormat;
 
         createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
