@@ -169,9 +169,14 @@ void TestBase::init() {
     createImageViews();
     createRenderPass();
     createGraphicsPipeline();
+    createFramebuffers();
 }
 
 void TestBase::cleanup() {
+
+    for (auto framebuffer : m_swapChainFramebuffers) {
+        vkDestroyFramebuffer(m_device, framebuffer, nullptr);
+    }
 
     vkDestroyPipeline(m_device, m_graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(m_device, m_pipelineLayout, nullptr);
@@ -614,4 +619,23 @@ VkShaderModule TestBase::createShaderModule(const std::vector<uint32_t>& code) {
     VK_CHECK(vkCreateShaderModule(m_device, &createInfo, nullptr, &shaderModule));
 
     return shaderModule;
+}
+
+void TestBase::createFramebuffers() {
+    m_swapChainFramebuffers.resize(m_swapChainImageViews.size());
+
+    for (size_t i = 0; i < m_swapChainImageViews.size(); i++) {
+        VkImageView attachments[] = {m_swapChainImageViews[i]};
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = m_renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = m_swapChainExtent.width;
+        framebufferInfo.height = m_swapChainExtent.height;
+        framebufferInfo.layers = 1;
+
+        VK_CHECK(vkCreateFramebuffer(m_device, &framebufferInfo, nullptr, &m_swapChainFramebuffers[i]));
+    }
 }

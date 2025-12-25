@@ -107,6 +107,8 @@ protected:
     VkPipelineLayout m_pipelineLayout = VK_NULL_HANDLE;
     VkPipeline m_graphicsPipeline = VK_NULL_HANDLE;
 
+    std::vector<VkFramebuffer> m_swapChainFramebuffers;
+
 private:
     void parseArgs(int argc, char** argv);
 
@@ -123,6 +125,7 @@ private:
     void createImageViews();
     void createRenderPass();
     void createGraphicsPipeline();
+    void createFramebuffers();
 
     bool isDeviceSuitable(VkPhysicalDevice device);
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
