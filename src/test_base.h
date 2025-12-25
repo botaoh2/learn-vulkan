@@ -81,6 +81,8 @@ protected:
     virtual int run() = 0;
     virtual void postrun() {}
 
+    void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+
     std::unordered_map<std::string, std::string> m_parameters;
 
     GLFWwindow* m_window = nullptr;
@@ -131,8 +133,6 @@ private:
     void createFramebuffers();
     void createCommandPool();
     void createCommandBuffer();
-
-    void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 
     bool isDeviceSuitable(VkPhysicalDevice device);
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);

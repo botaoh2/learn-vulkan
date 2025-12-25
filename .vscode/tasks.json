@@ -4,7 +4,7 @@
         {
             "label": "conan: install",
             "type": "shell",
-            "command": "conan install . --build=missing -s build_type=${input:buildType} -pr msvc",
+            "command": "conan install . --build=missing -s build_type=${input:buildType}",
             "group": "build"
         },
         {
