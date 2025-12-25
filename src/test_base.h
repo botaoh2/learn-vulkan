@@ -109,6 +109,9 @@ protected:
 
     std::vector<VkFramebuffer> m_swapChainFramebuffers;
 
+    VkCommandPool m_commandPool;
+    VkCommandBuffer m_commandBuffer;
+
 private:
     void parseArgs(int argc, char** argv);
 
@@ -126,6 +129,10 @@ private:
     void createRenderPass();
     void createGraphicsPipeline();
     void createFramebuffers();
+    void createCommandPool();
+    void createCommandBuffer();
+
+    void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 
     bool isDeviceSuitable(VkPhysicalDevice device);
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
