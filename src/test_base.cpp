@@ -689,7 +689,7 @@ void TestBase::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t image
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent = m_swapChainExtent;
 
-    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+    VkClearValue clearColor = {.color = {.float32 = {0.0f, 0.0f, 0.0f, 1.0f}}};
     renderPassInfo.clearValueCount = 1;
     renderPassInfo.pClearValues = &clearColor;
 
